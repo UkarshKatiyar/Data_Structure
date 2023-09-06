@@ -1,0 +1,501 @@
+#include <iostream>
+using namespace std;
+
+class Node{
+    public:
+    // int data;
+    // Node* next;
+    // Node(){
+    //     this->data=0;
+    //     this->next=NULL;
+        
+    // }
+    // Node(int data){
+    //     this->data=data;
+    //     this->next=NULL;
+    // }
+    
+    //doubly link list
+    int data;
+    Node* next;
+    Node* pre;
+    Node(){
+        this->data=0;
+        this->next=NULL;
+        this->pre=NULL;
+    }
+    Node(int data){
+        this->data=data;
+        this->next=NULL;
+        this->pre=NULL;
+    }
+};
+// void insert(Node* &head,Node* &tail,int data){
+//     Node* ne=new Node(data);
+//     ne->next=head;
+//     if(head==NULL){
+//         tail=ne;
+//     }
+//     head=ne;
+// }
+// void itail(Node* &head,Node* &tail,int data){
+//     Node* nee=new Node(data);
+//     if(head==NULL){
+//         head=nee;
+//         tail=nee;
+//     }
+//     else{
+//         tail->next=nee;
+//     }
+//     tail=nee;
+// }
+void print(Node* head){
+    Node* temp=head;
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+}
+int find(Node* head){
+    int qw=0;
+    Node* neq=head;
+    
+    while(neq!=NULL){
+        neq=neq->next;
+        qw++;
+    }
+    return qw;
+}
+// void mid(int data,int pos,Node* &head,Node* &tail){
+//     if(head==NULL){
+//         Node* tem=new Node(data);
+//         head=tem;
+//         tail=tem;
+//         return;
+//     }
+//     if(pos==0){
+//         insert(head,tail,data);
+//         return;
+//     }
+//     int len=find(head);
+//     if(pos>=len){
+//         itail(head,tail,data);
+//         return;
+//     }
+        
+        
+    
+//     int i=1;
+//     Node* pre=head;
+//     while(i>pos){
+//         pre=pre->next;
+//         i++;
+//     }
+//     Node* cir=pre->next;
+//     Node* neww=new Node(data);
+//     neww->next =cir;
+//     pre->next=neww;
+// }
+// void deleten(int pos,Node* &head,Node* &tail){
+//     if(head==NULL){
+//         cout<<"can not delete bro";
+        
+//     }
+//     if(pos==1){
+//         Node* temp=head;
+//         head=head->next;
+//         temp->next=NULL;
+//         delete(temp);
+//     }
+//     int len=find(head);
+//     // Node* pre=head;
+//     // int i=1;
+//     // while(i>pos-1){
+//     //     pre=pre-1;
+//     //     i++;
+//     // }
+//     // pre->next=NULL;
+// }
+
+
+//doubly linked list
+void insertdoubly(Node* &head,Node* &tail,int data){
+    //create a new node
+    if(head==NULL){
+       Node* ne=new Node(data);
+       head=ne;
+       tail=ne;
+       return;
+    }
+    
+    Node* ne=new Node(data);
+    ne->next=head;
+    head->pre=ne;
+    head=ne;
+    
+}
+void insertdobtail(Node* &head,Node* &tail,int data){
+    if(head==NULL){
+       Node* ne=new Node(data);
+       head=ne;
+       tail=ne;
+       
+    }
+    else{
+        Node* ne=new Node(data);
+        tail->next=ne;
+        ne->pre=ne;
+        tail=ne;
+    }
+}
+void insertdobmid(int pos,int data,Node* &head,Node* &tail){
+    if(head==NULL){
+        Node* tem=new Node(data);
+        head=tem;
+        tail=tem;
+        return;
+    }
+    if(pos==1){
+        insertdoubly(head,tail,data);
+        return;
+    }
+    int len=find(head);
+    if(pos>=len){
+        insertdobtail(head,tail,data);
+        return;
+        
+    }
+    int i=1;
+    Node* pree=head;
+    while(i<pos-1){
+        pree=pree->next;
+        i++;
+    }
+    Node* cur=pree->next;
+    Node* ime=new Node(data);
+    ime->next=cur;
+    cur->pre=ime;
+    pree->next=ime;
+    ime->pre=pree;
+}
+
+
+
+Node* reverse(Node* &head,int k){
+    Node* pre=NULL;
+    Node* curr=head;
+    Node* forw=curr->next;
+    int count=0;
+    while(count<k){
+        forw=curr->next;
+        curr->next=pre;
+        pre=curr;
+        curr=forw;
+        count++;
+    }
+    if(forw!=NULL){
+        head->next=reverse(forw,k);
+        
+    }
+    return pre;
+}
+bool iscircular(Node* &head){
+    Node* fast=head;
+    Node* slow=head;
+    while(fast!=NULL && slow!=NULL){
+        fast=fast->next;
+        if(fast!=NULL){
+            fast=fast->next;
+            slow=slow->next;
+            
+        }
+        if(fast==slow){
+            return true;
+        }
+    }
+    return false;
+}
+Node* getMiddle(Node* &head) {
+        if(head == NULL) {
+                cout << "LL is empty" << endl;
+                return head;
+        }
+        if(head -> next == NULL) {
+                //only 1 node in LL
+                return head;
+        }
+
+        // LL have > 1 node
+        Node* slow = head;
+        Node* fast = head->next;
+
+        while(slow != NULL && fast != NULL) {
+                fast = fast -> next;
+                if(fast != NULL) {
+                        fast = fast -> next;
+                        slow = slow -> next;
+                }
+        }
+        return slow;
+}
+
+bool looping(Node* &head) {
+        if(head == NULL) {
+                cout << "LL is empty" << endl;
+                return head;
+        }
+        if(head -> next == NULL) {
+                //only 1 node in LL
+                return head;
+        }
+
+        // LL have > 1 node
+        Node* slow = head;
+        Node* fast = head;
+
+        while(slow != NULL && fast != NULL) {
+                fast = fast -> next;
+                if(fast != NULL) {
+                        fast = fast -> next;
+                        slow = slow -> next;
+                }
+                if(slow==fast){
+                    return true;
+                }
+        }
+        
+        return false;
+}
+
+Node* sta(Node* &head) {
+        if(head == NULL) {
+                cout << "LL is empty "<< endl;
+                return NULL;
+        }
+
+        Node* slow = head;
+        Node* fast = head;
+
+        while(fast != NULL) {
+                fast = fast -> next;
+                if(fast != NULL) {
+                        fast = fast -> next;
+                        slow = slow -> next;
+                }
+
+                if(slow == fast ) {
+                       slow = head;
+                       break;
+                }
+        }
+
+        while(slow != fast) {
+                slow = slow -> next;
+                fast =fast -> next;
+        }
+
+        return slow;
+        
+
+}
+
+Node* loopstartingpoint(Node* &head){
+    Node* fast=head;
+    Node* slow=head;
+    while(fast!=NULL && slow!=NULL){
+        fast=fast->next;
+        if(fast!=NULL){
+            fast=fast->next;
+            slow=slow->next;
+            
+        }
+        if(fast==slow){
+            slow=head;
+            break;
+        }
+        
+    }
+    while(slow != fast) {
+                slow = slow -> next;
+                fast =fast -> next;
+        }
+
+    return slow;
+}
+
+
+Node* removeloop(Node* &head) {
+        if(head == NULL) {
+                cout << "LL is empty "<< endl;
+                return NULL;
+        }
+
+        Node* slow = head;
+        Node* fast = head;
+
+        while(fast != NULL) {
+                fast = fast -> next;
+                if(fast != NULL) {
+                        fast = fast -> next;
+                        slow = slow -> next;
+                }
+
+                if(slow == fast ) {
+                       slow = head;
+                       break;
+                }
+        }
+        Node* prev=fast;
+        
+
+        while(slow != fast) {
+                prev=fast;
+                slow = slow -> next;
+                fast =fast -> next;
+        }
+        prev->next =NULL;
+
+        return slow;
+        
+
+}
+
+
+int getLength(Node* head) {
+        int len = 0;
+        Node* temp = head;
+        while(temp != NULL) {
+                temp = temp -> next; 
+                len++;
+        }
+        return len;
+}
+
+
+
+
+
+
+
+
+void deletion(int pos,Node* &head,Node* &tail){
+    if(head==NULL){
+        cout<<"can not delete";
+        return;
+    }
+    if(pos==1){
+        Node* temp=head;
+        head=head->next;
+        head->pre=NULL;
+        temp->next=NULL;
+        delete temp;
+        return;
+    }
+    int len=find(head);
+    cout<<endl<<"len"<<len<<endl;
+    if(pos == len){
+        
+        // tail=tail->pre;
+        // temp->pre=NULL;
+        // tail->next=NULL;
+        // delete temp;
+        // return;
+       
+        Node* tempo = tail;
+        tail = tail -> pre;
+        
+        tempo->pre = NULL;
+        tail ->next = NULL;
+       
+        delete tempo;
+        return;
+        
+         
+    }
+    
+    // for mid
+    int i=1;
+    Node* left=head;
+    if(len<pos-1){
+        left=left->next;
+        i++;
+    }
+    Node* curr=left->next;
+    Node* right=curr->next;
+    // new node
+    left->next=right;
+    right->pre=left;
+    curr->next=NULL;
+    curr->pre=NULL;
+    cout<<"list"<<curr<<endl;;
+    
+    delete curr;
+    return;
+}
+
+int main() {
+    // Write C++ code here
+    std::cout << "Hello world!"<<endl;
+    Node* head=NULL;
+    Node* tail=NULL;
+    // insert(head,tail,12);
+    // insert(head,tail,11);
+    // insert(head,tail,13);
+    // insert(head,tail,14);
+    // itail(head,tail,177);
+    // mid(121,2,head,tail);
+    // insertdoubly(head,tail,12);
+    // insertdoubly(head,tail,122);
+    // insertdoubly(head,tail,121);
+    // insertdoubly(head,tail,124);
+    insertdobtail(head,tail,123);
+    insertdobtail(head,tail,12);
+    insertdobtail(head,tail,1);
+    insertdobtail(head,tail,1223);
+    print(head);
+    cout<<"answer"<<endl;
+    insertdobmid(1,12123222,head,tail);
+    print(head);
+    cout<<endl;
+    deletion(1,head,tail);
+    print(head);
+    cout<<endl;
+    deletion(2,head,tail);
+    print(head);
+//  Node* second = new Node(20);
+//  Node* third = new Node(30);
+//  Node* fourth = new Node(40);
+//  Node* fifth = new Node(50);
+//  Node* sixth = new Node(60);
+//  Node* seventh = new Node(70);
+//  Node* eighth = new Node(80);
+//  Node* nint = new Node(100);
+//  Node* ninth = new Node(90);
+// 
+//  head -> next = second;
+//  second -> next = third;
+//  third -> next = fourth;
+//  fourth -> next = fifth;
+//  fifth -> next = sixth;
+//  sixth -> next = seventh;
+//  seventh -> next = eighth;
+//  eighth -> next = nint;
+//  nint -> next = ninth;
+//  ninth -> next = fourth;
+//  
+//  
+//  
+////   cout<<"loop or no loop  "<<looping(head);
+////   cout << "Starting Point of LOOP is: " << sta(head) -> data ;
+////   removeloop(head);
+////   cout<<endl;print(head);
+////   cout<<getLength(head)<<endl;
+////   cout<<getMiddle(head)->data;
+////     print(head);
+////   head = reverse(head, 5);
+////   print(head);
+//cout<<"iscircular "<<iscircular(head);
+//cout<<"   loopstart "<<loopstartingpoint(head)->data;
+
+    return 0;
+}
